@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CitySearch = ({ citySuggestions, city, handleSubmit, handleCitySelect, setCity, fetchError }) => {
+const CitySearch = ({ citySuggestions, city, handleSubmit, handleCitySelect, setCity, fetchError, loadingCity, setLoadingCity }) => {
     return (
         <div className='relative w-full flex flex-col'>
             <form onSubmit={handleSubmit} className='w-full flex' action="">
@@ -15,18 +15,24 @@ const CitySearch = ({ citySuggestions, city, handleSubmit, handleCitySelect, set
             {
                 fetchError == null ?
                     <p></p>
-                :   <p className='w-full text-lg text-center absolute top-12 text-red-600 font-semibold transition-all'>{fetchError}</p>
+                    : <p className='w-full text-lg text-center absolute top-12 text-red-600 font-semibold transition-all'>{fetchError}</p>
 
             }
             {
                 citySuggestions.length > 0 && (
                     <ul className='max-h-52 overflow-y-scroll absolute top-14 w-full bg-white rounded p-4 space-y-2'>
                         {
-                            citySuggestions.map((suggestion) => (
-                                <li className='cursor-pointer hover:bg-gray-100 px-2' key={`${suggestion.name}-${suggestion.stateCode}`} onClick={() => handleCitySelect(suggestion.name)}>
-                                    {suggestion.name}, {suggestion.stateCode}, {suggestion.countryCode}
-                                </li>
-                            ))
+                            loadingCity ? (
+                                <div className='w-full justify-center'>
+                                    <p className='font-semibold'>Loading Cities...</p>
+                                </div>
+                            ) : (
+                                citySuggestions.map((suggestion) => (
+                                    <li className='cursor-pointer hover:bg-gray-100 px-2' key={`${suggestion.name}-${suggestion.stateCode}`} onClick={() => handleCitySelect(suggestion.name)}>
+                                        {suggestion.name}, {suggestion.stateCode}, {suggestion.countryCode}
+                                    </li>
+                                ))
+                            )
                         }
                     </ul>
                 )

@@ -29,6 +29,7 @@ const WeatherWrapper = () => {
     const [citySuggestions, setCitySuggestions] = useState({})
     const [fetchError, setFetchError] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [loadingCity, setLoadingCity] = useState(false)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -120,6 +121,7 @@ const WeatherWrapper = () => {
                 }
             }
             try {
+                setLoadingCity(true)
                 const response2 = await axios.request(options)
                 const data2 = response2.data
 
@@ -127,6 +129,9 @@ const WeatherWrapper = () => {
             } catch (error) {
                 console.log(`Error fetching city suggestions: ${error}`)
                 setFetchError(`Error fetching city suggestions`)
+            }
+            finally {
+                setLoadingCity(false)
             }
         }
 
@@ -144,7 +149,7 @@ const WeatherWrapper = () => {
 
     return (
         <div className='w-[370px] h-[600px] md:w-[500px] md:min-h-0 md:h-[600px] bg-[#f4f4f4] md:rounded md:shadow-xl p-8 md:p-10'>
-            <CitySearch fetchError={fetchError} city={city} citySuggestions={citySuggestions} handleSubmit={handleSubmit} handleCitySelect={handleCitySelect} setCity={setCity} />
+            <CitySearch loadingCity={loadingCity} setLoadingCity={setLoadingCity} fetchError={fetchError} city={city} citySuggestions={citySuggestions} handleSubmit={handleSubmit} handleCitySelect={handleCitySelect} setCity={setCity} />
             {
                 loading ? (
                     <div className='w-full h-[500px] flex justify-center items-center'>
